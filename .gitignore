@@ -1,0 +1,46 @@
+# Python-related files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.eggs
+
+# Environment-related files
+.env
+venv/
+.envrc
+
+# IDE-specific files
+.idea/
+.vscode/
+*.code-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+logs/
+*.log
+*.bak
+*.swp
+*.tmp
+
+# Data and output files
+data/*.json
+data/*.yaml
+data/*.db
+
+# LangChain-specific files
+vectorstore/
+retriever_cache/
+
+# LLM-related files
+llms/llm_params.yaml
+
+# Miscellaneous
+*.zip
+*.tar.gz
+*.ipynb_checkpoints
