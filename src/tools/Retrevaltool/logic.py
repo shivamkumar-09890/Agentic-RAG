@@ -1,86 +1,73 @@
-"""
-Main entry point for the RAG application.
-"""
-# from config.constants import CONFIG_PATH, INPUT_DIR, OUTPUT_DIR
+import os
+from typing import List, Dict, Any
+import logging
+from dataprocessing import load_and_process_pdf
+from embedding import calculate_embedding, query_embeddings, load_index
+from llmcalling import retrieve_information
+from citation import retrieve_information_citation
 
-# def load_config() -> Dict[Any, Any]:
-#     """Load configuration from YAML file."""
-#     with open(CONFIG_PATH, 'r') as f:
-#         return yaml.safe_load(f)
+logger = logging.getLogger(__name__)
+
+class RetrievalTool:
+    def __init__(self, input_dir: str = r"data\input", index_path: str = "data/output/faiss_index.index", doc_map_path: str = "data/output/doc_map.json"):
+        self.input_dir = input_dir
+        self.index_path = index_path
+        self.doc_map_path = doc_map_path
+
+    def index_pdfs(self) -> None:
+        """Index all PDFs in the input directory."""
+        pdf_files = [os.path.join(self.input_dir, f) for f in os.listdir(self.input_dir) if f.endswith('.pdf')]
+        
+        all_chunks = []
+        all_metadata = []
+        
+        for pdf_file in pdf_files:
+            logger.info(f"Processing {pdf_file}...")
+            chunks, metadata = load_and_process_pdf(pdf_file)
+            all_chunks.extend(chunks)
+            all_metadata.extend(metadata)
+        
+        # Calculate embeddings for all chunks
+        calculate_embedding(all_chunks, all_metadata)
+        logger.info("PDF indexing completed")
+
+    def query_index(self, query: str) -> Dict[str, Any]:
+        """Query the index with the given query."""
+        index, documents, ids = load_index(self.index_path, self.doc_map_path)
+        results = query_embeddings(index, query, documents, ids)
+
+        response = retrieve_information_citation(query, results)
+        return {
+            "query": query,
+            "response": response['content'],
+            "citations": response['citations']
+        }
+
+    def execute(self, query: str) -> Dict[str, Any]:
+        """
+        Executes indexing and querying the index.
+        
+        :param query: The query to search for.
+        :return: A dictionary containing query, response, and citations.
+        """
+        # Index PDFs before querying
+        self.index_pdfs()
+        
+        # Query the index with the provided query
+        return self.query_index(query)
 
 
-def index_pdfs():
-    """Index all PDFs in the input directory"""
-    input_dir = r"data\input"
-    #calling resluts will give the output dict as below after classifying each pages on basis of text and scanned.
-    # {  
-    #   {
-    #   "file1.pdf": {
-    #       "text_pages": [0, 1, 2],
-    #       "image_pages": [3, 4]
-    #   },
-    #   "file2.pdf": {
-    #       "text_pages": [0, 1],
-    #       "image_pages": [2, 3, 4]
-    #   }
-    # }
-    results = process_folder(input_dir)
+# # Example usage as a tool in your agent
+# if __name__ == "__main__":
+#     # Initialize the retrieval tool
+#     retrieval_tool = RetrievalTool()
 
-    # Get all PDF files
-    pdf_files = [os.path.join(input_dir, f) for f in os.listdir(input_dir) if f.endswith('.pdf')]
+#     # Query to search
+#     query = "What is discrete variable?"
+
+#     # Execute tool and get response
+#     result = retrieval_tool.execute(query=query)
     
-    all_chunks = []
-    all_metadata = []
-    
-    # Process each PDF
-    for pdf_file in pdf_files:
-        logger.info(f"Processing {pdf_file}...")
-        #getting text pages for pdf file
-        text_pages = results[pdf_file]["text_pages"]  # [0, 1, 2]
-        #passed text pages to get chunks only for those
-        chunks, metadata = load_and_process_pdf(pdf_file,text_pages)
-        all_chunks.extend(chunks)
-        all_metadata.extend(metadata)
-    
-    # Calculate embeddings for all chunks
-    calculate_embedding(all_chunks, all_metadata)
-    logger.info("PDF indexing completed")
-
-def query_index(query):
-    """Query the index with the given query"""
-    # Load index and query
-    index, documents, ids = load_index("data/output/faiss_index.index", "data/output/doc_map.json")
-    results = query_embeddings(index, query, documents, ids)
-
-    response = retrieve_information_citation(query, results)
-    logger.info(f"Query: {query}")
-    logger.info(f"Response: {response['content']}")
-    logger.info(f"Citations: {response['citations']}")
-
-def main():
-    # Set up logging
-    logger.info("Starting RAG application")
-    
-    # # Load configuration
-    # config = load_config()
-    # logger.info("Configuration loaded successfully")
-
-    # Index PDFs
-    index_pdfs()
-
-    query = "What is discrete variable?"
-    query_index(query)
-
-if __name__ == '__main__':
-    import yaml
-    from pathlib import Path
-    from typing import Dict, Any
-    import time
-    from dataprocessing import load_and_process_pdf
-    from embedding import calculate_embedding, query_embeddings, load_index, save_index
-    from findingtextpage import process_folder
-    from llmcalling import retrieve_information
-    from citation import retrieve_information_citation
-    import os
-    logger = setup_logger(__name__)
-    main()
+#     # Print the result
+#     print("Query Result:")
+#     print(result)

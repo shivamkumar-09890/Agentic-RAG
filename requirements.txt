@@ -16,3 +16,7 @@ transformers
 torch
 torchvision 
 torchaudio
+duckduckgo-search
+tavily-python
+beautifulsoup4
+pydantic
