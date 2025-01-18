@@ -43,7 +43,7 @@ class RetrievalTool:
             "citations": response['citations']
         }
 
-    def execute(self, query: str) -> Dict[str, Any]:
+    def _run(self, query: str) -> Dict[str, Any]:
         """
         Executes indexing and querying the index.
         
@@ -63,10 +63,10 @@ class RetrievalTool:
 #     retrieval_tool = RetrievalTool()
 
 #     # Query to search
-#     query = "What is discrete variable?"
+#     query = "What is the research about?"
 
 #     # Execute tool and get response
-#     result = retrieval_tool.execute(query=query)
+#     result = retrieval_tool._run(query=query)
     
 #     # Print the result
 #     print("Query Result:")

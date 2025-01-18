@@ -72,4 +72,16 @@ class WebSearchTool(BaseTool):
                 print(f"DuckDuckGo search error: {e}")
         
         return "No search provider available"
+
+# # Example to execute the tool
+
+# from web_search import WebSearchTool
+
+
+# if __name__ == "__main__":
+#     print("Running manual test for WebSearch")
+#     tool = WebSearchTool()
+#     query = "Who is Kiran Silaych?"
+#     result = tool._run(query)
+#     print(result)
     

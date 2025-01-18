@@ -40,17 +40,18 @@ def load_and_process_pdf(file_path, num_workers=None):
         num_workers = cpu_count()
 
     # Divide the text_page into chunks for parallel processing
-    pages_per_worker = len(total_pages) // num_workers if len(total_pages) >= num_workers else 1
+    pages_per_worker = total_pages // num_workers if total_pages >= num_workers else 1
     page_ranges = [
-        total_pages[i:i + pages_per_worker]
-        for i in range(0, len(total_pages), pages_per_worker)
+        range(i, min(i + pages_per_worker, total_pages))  # Create ranges for each worker
+        for i in range(0, total_pages, pages_per_worker)
     ]
+
 
     all_chunks = []
     all_metadata = []
     with Pool(processes=num_workers) as pool:
         # Map the processing to each chunk of text_page
-        results = pool.map(process_pages, [(file_path, page_range) for page_range in page_ranges])
+        results = pool.map(process_pages, [(file_path, list(page_range)) for page_range in page_ranges])
         for chunks, metadata in results:
             all_chunks.extend(chunks)
             all_metadata.extend(metadata)

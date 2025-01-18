@@ -43,24 +43,24 @@ class TextToMarkdownTool(BaseTool):
         return self._run(text)
         
 
-# # Example usage as a tool in your agent
-# if __name__ == "__main__":
-#     # Initialize the TextToMarkdownTool
-#     text_to_markdown_tool = TextToMarkdownTool()
+# Example usage as a tool in your agent
+if __name__ == "__main__":
+    # Initialize the TextToMarkdownTool
+    text_to_markdown_tool = TextToMarkdownTool()
 
-#     # Input text to be converted
-#     text = """# Heading 1
+    # Input text to be converted
+    text = """# Heading 1
 
-#     This is a regular paragraph.
+    This is a regular paragraph.
     
-#     - List item 1
-#     - List item 2
+    - List item 1
+    - List item 2
     
-#     This is another regular paragraph."""
+    This is another regular paragraph."""
 
-#     # Execute the tool and get the markdown output
-#     result = text_to_markdown_tool.execute(text=text)
+    # Execute the tool and get the markdown output
+    result = text_to_markdown_tool.execute(text=text)
     
-#     # Print the markdown result
-#     print("Converted Markdown:")
-#     print(result)
+    # Print the markdown result
+    print("Converted Markdown:")
+    print(result)

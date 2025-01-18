@@ -1,4 +1,4 @@
-from modules.embeddings import load_index, query_embeddings
+from embedding import load_index, query_embeddings
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate
 from langchain.schema.runnable import RunnableSequence
 from langchain_openai import ChatOpenAI
