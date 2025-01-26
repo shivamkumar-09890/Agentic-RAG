@@ -1,0 +1,4 @@
+directories:
+  stored_csv_xlsx_directory: data\input\
+  sqldb_directory: data\output\sqldb.db
+  uploaded_files_sqldb_directory: data\output\uploaded_files_sqldb.db

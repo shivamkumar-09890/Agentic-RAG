@@ -32,6 +32,8 @@ logs/
 data/*.json
 data/*.yaml
 data/*.db
+data/input/
+data/output/
 
 # LangChain-specific files
 vectorstore/

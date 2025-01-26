@@ -20,3 +20,9 @@ duckduckgo-search
 tavily-python
 beautifulsoup4
 pydantic
+#sql agent
+langchain_core
+pandas
+pyprojroot
+SQLAlchemy
+chromadb
