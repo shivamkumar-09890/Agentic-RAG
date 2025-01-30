@@ -18,11 +18,18 @@ torchvision
 torchaudio
 duckduckgo-search
 tavily-python
-beautifulsoup4
-pydantic
+typing
+
 #sql agent
 langchain_core
 pandas
 pyprojroot
 SQLAlchemy
 chromadb
+
+#web scrapper
+playwright
+beautifulsoup4
+duckduckgo-search
+tavily-python
+pydantic
